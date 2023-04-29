@@ -1,4 +1,6 @@
-pub mod ipgeo;
+pub mod client;
+pub mod ip;
+pub mod ua;
 
 pub fn add(left: usize, right: usize) -> usize {
     left + right

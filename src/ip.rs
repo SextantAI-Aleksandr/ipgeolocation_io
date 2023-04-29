@@ -1,43 +1,8 @@
-//! This module parses the IP Geo Location response from ipgeolocation.io 
-//! See https://ipgeolocation.io/documentation/ip-geolocation-api.html 
-//!
-
+//! ipgeolocation.io contains a service to lookup the geographic location of IP addresses
+//! The structs in this module correspond to the responses from that service 
+//! See [https://ipgeolocation.io/documentation/ip-geolocation-api.html](https://ipgeolocation.io/documentation/ip-geolocation-api.html)
 
 use serde::{Serialize, Deserialize};
-use hyperactive::{client::get, err::GenericError};
-use reqwest;
-
-pub struct IpGeoClient {
-    api_key: String 
-}
-
-
-impl IpGeoClient {
-
-    // Create a new client by providing the api key 
-    pub fn new(api_key: &str) -> Self {
-        let api_key = api_key.to_string();
-        IpGeoClient{api_key}
-    }
-
-    fn geoloc_url(&self, ip_address: &str) -> String {
-        let url = format!("https://api.ipgeolocation.io/ipgeo?apiKey={}&ip={}", &self.api_key, &ip_address);
-        url 
-    }
-
-
-    pub async fn geoloc_ip(&self, ip_address: &str) -> Result<IpGeoLoc, GenericError> {
-        let url = self.geoloc_url(ip_address);
-        let resp: IpGeoLoc = reqwest::get(&url)
-            .await?
-            .json::<IpGeoLoc>()
-            .await?;
-        Ok(resp)
-    }
-
-
-
-}
 
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -58,7 +23,7 @@ pub struct TimeZone {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct IpGeoLoc {
+pub struct IpAddress {
     pub ip: String,  // i.e. 8.8.8.8",
     pub hostname: Option<String>,  // i.e. dns.google",
     pub continent_code: String,  // i.e. NA",
@@ -86,3 +51,4 @@ pub struct IpGeoLoc {
     pub currency: Currency,
     pub time_zone: TimeZone,
 }
+
